@@ -5,12 +5,22 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var expect = require('chai').expect;
 var cors = require('cors');
+var helmet = require('helmet');
 
 var apiRoutes = require('./routes/api.js');
 var fccTestingRoutes = require('./routes/fcctesting.js');
 var runner = require('./test-runner');
 
 var app = express();
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      scriptSrc: ["'self'", 'code.jquery.com', "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+    },
+  })
+);
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
