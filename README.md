@@ -192,3 +192,25 @@ if (Array.isArray(stock)) {
 ### Async Await is more readable than old callback based API
 
 - Making async API call and passing returned data into callback function make it difficult to understand what the callback function does because the data and handlers are separated.
+
+### Increase default timeout for mocha
+
+- Testings were slow due to external API being on glitch which spins up upon request.
+
+`2_functional-tess.js`
+
+```js
+suite('Functional Tests', function () {
+  this.timeout(10000); // this doesn't work inside arrow functions
+  suite('GET /api/stock-prices => stockData object', function () {
+    test('1 stock', function (done) {
+      chai
+        .request(server)
+        .get('/api/stock-prices')
+        .query({ stock: 'goog' })
+        .end(function (err, res) {
+          // asserts
+          done();
+        });
+    });
+```
